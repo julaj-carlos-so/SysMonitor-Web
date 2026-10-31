@@ -11,6 +11,7 @@ Route::get('/', function () {
 // Rutas de Carlos (M1)
 Route::get('/m1-procesos', [ProcesoController::class, 'index']);
 Route::post('/m1-procesos/senal', [ProcesoController::class, 'enviarSenal'])->name('procesos.senal');
+Route::post('/m1-procesos/lanzar', [ProcesoController::class, 'lanzarPrueba'])->name('procesos.lanzar');
 
 // MÓDULO 2 - CPU Y MEMORIA
 Route::get('/modulo2/datos', [App\Http\Controllers\Modulo2Controller::class, 'datos'])->name('modulo2.datos');
