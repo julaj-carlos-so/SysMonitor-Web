@@ -16,7 +16,11 @@
                     <div class="card-body">
                         <form action="/m3-simulador" method="POST">
                             @csrf
-                            <input type="hidden" name="algoritmo" value="FCFS">
+                            <label class="form-label fw-bold">Algoritmo</label>
+<select name="algoritmo" class="form-select mb-3">
+    <option value="FCFS">FCFS (First Come, First Serve)</option>
+    <option value="SJF">SJF (Shortest Job First - No expropiativo)</option>
+</select>
                             <h5 class="mb-3">Procesos</h5>
                             @for($i = 0; $i < 3; $i++)
                             <div class="row mb-2">

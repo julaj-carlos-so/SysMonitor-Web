@@ -43,7 +43,51 @@ class PlanificacionController extends Controller
                     'fin' => $fin,
                     'ancho' => $p['rafaga'] 
                 ];
+             }
+        }
+
+        // Lógica SJF (No expropiativo)
+        if ($algoritmo === 'SJF') {
+            usort($procesos, fn($a, $b) => $a['llegada'] <=> $b['llegada']);
+            $tiempoActual = 0;
+            $procesosPendientes = $procesos;
+            $procesosTerminados = [];
+
+            while (count($procesosPendientes) > 0) {
+                $disponibles = array_filter($procesosPendientes, fn($p) => $p['llegada'] <= $tiempoActual);
+
+                if (empty($disponibles)) {
+                    $tiempoActual++;
+                    continue;
+                }
+
+                usort($disponibles, fn($a, $b) => $a['rafaga'] <=> $b['rafaga']);
+                $procesoActual = array_shift($disponibles);
+
+                foreach ($procesosPendientes as $key => $p) {
+                    if ($p['nombre'] === $procesoActual['nombre']) {
+                        unset($procesosPendientes[$key]);
+                        break;
+                    }
+                }
+
+                $inicio = $tiempoActual;
+                $tiempoActual += $procesoActual['rafaga'];
+                $fin = $tiempoActual;
+
+                $procesoActual['espera'] = $inicio - $procesoActual['llegada'];
+                $procesoActual['retorno'] = $fin - $procesoActual['llegada'];
+
+                $gantt[] = [
+                    'nombre' => $procesoActual['nombre'],
+                    'inicio' => $inicio,
+                    'fin' => $fin,
+                    'ancho' => $procesoActual['rafaga']
+                ];
+
+                $procesosTerminados[] = $procesoActual;
             }
+            $procesos = $procesosTerminados;
         }
 
         $esperaPromedio = collect($procesos)->avg('espera');
