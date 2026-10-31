@@ -5,7 +5,7 @@ use App\Http\Controllers\ProcesoController;
 use App\Http\Controllers\PlanificacionController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('dashboard');
 });
 
 // Rutas de Carlos (M1)
